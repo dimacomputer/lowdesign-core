@@ -1,0 +1,51 @@
+# ---------------------------------------------------------
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+# ---------------------------------------------------------
+# Node.js / npm / build tools
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+.pnp.*
+.pnp.js
+
+# Dist / build outputs
+dist/
+build/
+.cache/
+.tmp/
+coverage/
+*.log
+
+# ---------------------------------------------------------
+# WordPress
+wp-config.php
+wp-content/uploads/
+wp-content/cache/
+wp-content/backups/
+wp-content/upgrade/
+wp-content/advanced-cache.php
+wp-content/object-cache.php
+wp-content/debug.log
+
+# ---------------------------------------------------------
+# IDE / Editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# ---------------------------------------------------------
+# Misc
+*.env
+*.local
+
