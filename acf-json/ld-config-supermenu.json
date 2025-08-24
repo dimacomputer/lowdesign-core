@@ -1,0 +1,156 @@
+[
+    {
+        "key": "group_67d586ac2ac55",
+        "title": "LD • Config – Supermenu",
+        "fields": [
+            {
+                "key": "field_67d586ac3fa48",
+                "label": "1 Menu",
+                "name": "1_menu_category",
+                "aria-label": "",
+                "type": "taxonomy",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "taxonomy": "category",
+                "add_term": 1,
+                "save_terms": 0,
+                "load_terms": 0,
+                "return_format": "object",
+                "field_type": "select",
+                "allow_null": 1,
+                "allow_in_bindings": 1,
+                "bidirectional": 0,
+                "multiple": 0,
+                "bidirectional_target": []
+            },
+            {
+                "key": "field_67f1074ec548f",
+                "label": "2 Menu",
+                "name": "2_menu_category",
+                "aria-label": "",
+                "type": "taxonomy",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "taxonomy": "category",
+                "add_term": 1,
+                "save_terms": 0,
+                "load_terms": 0,
+                "return_format": "object",
+                "field_type": "select",
+                "allow_null": 0,
+                "allow_in_bindings": 1,
+                "bidirectional": 0,
+                "multiple": 0,
+                "bidirectional_target": []
+            },
+            {
+                "key": "field_67f10789c5491",
+                "label": "3 Menu",
+                "name": "3_menu_category",
+                "aria-label": "",
+                "type": "taxonomy",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "taxonomy": "category",
+                "add_term": 1,
+                "save_terms": 0,
+                "load_terms": 0,
+                "return_format": "object",
+                "field_type": "select",
+                "allow_null": 0,
+                "allow_in_bindings": 1,
+                "bidirectional": 0,
+                "multiple": 0,
+                "bidirectional_target": []
+            },
+            {
+                "key": "field_67f10793c5493",
+                "label": "4 Menu",
+                "name": "4_menu_category",
+                "aria-label": "",
+                "type": "taxonomy",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "25",
+                    "class": "",
+                    "id": ""
+                },
+                "taxonomy": "category",
+                "add_term": 1,
+                "save_terms": 0,
+                "load_terms": 0,
+                "return_format": "object",
+                "field_type": "select",
+                "allow_null": 0,
+                "allow_in_bindings": 1,
+                "bidirectional": 0,
+                "multiple": 0,
+                "bidirectional_target": []
+            },
+            {
+                "key": "field_68234bfb8c377",
+                "label": "Master Supermenu Array Category",
+                "name": "master_supermenu_array_category",
+                "aria-label": "",
+                "type": "taxonomy",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "taxonomy": "category",
+                "add_term": 1,
+                "save_terms": 0,
+                "load_terms": 0,
+                "return_format": "id",
+                "field_type": "select",
+                "allow_null": 0,
+                "allow_in_bindings": 0,
+                "bidirectional": 0,
+                "multiple": 0,
+                "bidirectional_target": []
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post",
+                    "operator": "==",
+                    "value": "251"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "seamless",
+        "label_placement": "left",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "Super Menu Controls",
+        "show_in_rest": 1
+    }
+]

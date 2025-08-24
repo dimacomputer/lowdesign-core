@@ -1,0 +1,119 @@
+// Bootstrap base (если компилируешь отдельно)
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+
+/* -----------------------------
+   Вспомогательные настройки
+-------------------------------- */
+
+// Если удобно задавать минимум в px — конвертнём в rem
+@function px-to-rem($px, $root: $font-size-root) {
+  @return ($px / $root) * 1rem;
+}
+
+// Если для какого-то имени min_xs не задан — возьмём долю от таргета
+$icon-xs-min-ratio: 0.60 !default; // 60% от целевого размера
+
+/* -----------------------------
+   База и фикс-утилиты
+-------------------------------- */
+
+@mixin icon-size($em) {
+  width: $em;
+  height: $em;
+}
+
+.icon,
+.bi {                 // .bi (Bootstrap Icons) тоже получает базу
+  width: 1.5em;        // базовый размер = 1.5 × font-size
+  height: 1.5em;
+  fill: currentColor;  // цвет = цвет текста
+  flex: 0 0 auto;
+}
+
+.icon--body   { @include icon-size(1.1em); }  // для иконок в тексте
+.icon--glyph  { @include icon-size(5em); }    // большие иконки
+.icon--supsub { @include icon-size(0.8em); }  // над-/подстрочные
+
+$icon-fixed-sizes: (
+  xs: 0.75em, // 12px при $font-size-root=16px
+  sm: 1em,    // 16px
+  md: 1.5em,  // 24px
+  lg: 2em,    // 32px
+  xl: 3em     // 48px
+);
+
+@each $k, $v in $icon-fixed-sizes {
+  .icon-#{$k} { @include icon-size($v); }
+}
+
+/* -----------------------------
+   4) Дискретный респонсив (опционально)
+-------------------------------- */
+
+@each $bp, $bp-width in $grid-breakpoints {
+  @if $bp != xs {
+    @include media-breakpoint-up($bp) {
+      .icon-#{$bp}-lg { @include icon-size(2em); } // ≥ #{$bp-width} → 2em
+      .icon-#{$bp}-xl { @include icon-size(3em); } // ≥ #{$bp-width} → 3em
+    }
+  }
+}
+
+/* -----------------------------
+   5) Плавное масштабирование (RFS + clamp)
+   xs → минимум (per-item), к lg/xl → target
+-------------------------------- */
+
+// Целевые верхние значения (как у тебя)
+$icon-fluid-targets: (
+  lg: 3.5rem, // ≈ 2.5rem на обычных ширинах
+  xl: 5rem    // ≈ 3rem на обычных ширинах
+);
+
+// Минимумы для xs ПО ИМЕНАМ (пример; задай под свои токены)
+$icon-min-xs: (
+  bi: px-to-rem(20),
+  icon-glyph: px-to-rem(40),
+  icon: px-to-rem(16),
+  icon-supsub: px-to-rem(8),
+  icon-1: px-to-rem(12),
+  icon-2: px-to-rem(16),
+  icon-3: px-to-rem(28),
+  icon-4: px-to-rem(40),
+  icon-5: px-to-rem(56)
+);
+
+// Миксин: кладёт «пол» на xs и даёт плавный рост к target
+// usage: @include icon-fluid-size($name: icon-3, $target: map-get($icon-fluid-targets, lg));
+@mixin icon-fluid-size($name, $target, $min: null) {
+  $resolved-min: if(
+    $min != null,
+    $min,
+    if(map-has-key($icon-min-xs, $name),
+      map-get($icon-min-xs, $name),
+      $target * $icon-xs-min-ratio
+    )
+  );
+
+  @if $enable-rfs {
+    // RFS даёт "середину" (fluid значение), clamp — нижний/верхний пределы
+    font-size: clamp(#{$resolved-min}, rfs-fluid-value($target), $target);
+  } @else {
+    font-size: $target; // без RFS — фикс
+  }
+}
+
+/* Утилиты с preset-таргетами (как у тебя было .icon-fluid-lg/xl),
+   но теперь с «полом» на xs. По умолчанию берётся ratio,
+   либо подставь конкретное имя из $icon-min-xs. */
+
+.icon-fluid-lg  { @include icon-fluid-size(icon, map-get($icon-fluid-targets, lg)); }
+.icon-fluid-xl  { @include icon-fluid-size(icon, map-get($icon-fluid-targets, xl)); }
+
+/* Если нужны конкретные варианты для разных иконок — размножаем кратко: */
+@each $n, $min in $icon-min-xs {
+  .icon-fluid--#{$n}-lg { @include icon-fluid-size($n, map-get($icon-fluid-targets, lg)); }
+  .icon-fluid--#{$n}-xl { @include icon-fluid-size($n, map-get($icon-fluid-targets, xl)); }
+}
