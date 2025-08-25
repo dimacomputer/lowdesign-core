@@ -1,40 +1,22 @@
-name: Deploy to NAS (debug)
-
+name: Deploy to NAS
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Show inputs
+      - name: Test SSH reachability (verbose)
         run: |
-          echo "HOST=${{ secrets.NAS_HOST }}"
-          echo "PORT=${{ secrets.NAS_PORT }}"
-          echo "USER=${{ secrets.NAS_USER }}"
-
-      - name: Setup SSH key
+          echo "${{ secrets.NAS_KEY }}" > id
+          chmod 600 id
+          ssh -vv -i id -o StrictHostKeyChecking=no -p "${{ secrets.NAS_PORT }}" \
+            ${{ secrets.NAS_USER }}@${{ secrets.NAS_HOST }} 'echo OK-connected'
+      - name: Run pull script on NAS
+        if: ${{ success() }}
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.NAS_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          # known_hosts для твоего внешнего хоста и порта
-          ssh-keyscan -p "${{ secrets.NAS_PORT }}" "${{ secrets.NAS_HOST }}" >> ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
-
-      - name: Test SSH (verbose)
-        run: |
-          set -x
-          ssh -vvv -i ~/.ssh/id_ed25519 -p "${{ secrets.NAS_PORT }}" \
-            -o StrictHostKeyChecking=yes \
-            "${{ secrets.NAS_USER }}@${{ secrets.NAS_HOST }}" \
-            "echo '✅ Connected'; whoami; uname -a"
-
-      - name: Run pull script
-        run: |
-          ssh -i ~/.ssh/id_ed25519 -p "${{ secrets.NAS_PORT }}" \
-            -o StrictHostKeyChecking=yes \
-            "${{ secrets.NAS_USER }}@${{ secrets.NAS_HOST }}"
+          echo "${{ secrets.NAS_KEY }}" > id
+          chmod 600 id
+          ssh -i id -o StrictHostKeyChecking=no -p "${{ secrets.NAS_PORT }}" \
+            ${{ secrets.NAS_USER }}@${{ secrets.NAS_HOST }}
