@@ -1,30 +1,40 @@
-name: Deploy to NAS
+name: Deploy to NAS (debug)
 
 on:
   push:
     branches: [ main ]
-  workflow_dispatch: {}   # ручной запуск из вкладки Actions
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Prepare SSH key
+      - name: Show inputs
+        run: |
+          echo "HOST=${{ secrets.NAS_HOST }}"
+          echo "PORT=${{ secrets.NAS_PORT }}"
+          echo "USER=${{ secrets.NAS_USER }}"
+
+      - name: Setup SSH key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.NAS_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          # чтобы не было вопроса "Are you sure you want to continue connecting?"
+          # known_hosts для твоего внешнего хоста и порта
           ssh-keyscan -p "${{ secrets.NAS_PORT }}" "${{ secrets.NAS_HOST }}" >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
 
-      - name: Run pull script on NAS
-        env:
-          NAS_HOST: ${{ secrets.NAS_HOST }}
-          NAS_PORT: ${{ secrets.NAS_PORT }}
-          NAS_USER: ${{ secrets.NAS_USER }}
+      - name: Test SSH (verbose)
         run: |
-          # если ключ в authorized_keys с принудительной командой — просто ssh без команды
-          ssh -i ~/.ssh/id_ed25519 -p "$NAS_PORT" "$NAS_USER@$NAS_HOST" /bin/sh /volume1/web/margo/pull_margo.sh
-          # если в authorized_keys стоит command=".../pull_margo.sh", можно короче:
-          # ssh -i ~/.ssh/id_ed25519 -p "$NAS_PORT" "$NAS_USER@$NAS_HOST"
+          set -x
+          ssh -vvv -i ~/.ssh/id_ed25519 -p "${{ secrets.NAS_PORT }}" \
+            -o StrictHostKeyChecking=yes \
+            "${{ secrets.NAS_USER }}@${{ secrets.NAS_HOST }}" \
+            "echo '✅ Connected'; whoami; uname -a"
+
+      - name: Run pull script
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -p "${{ secrets.NAS_PORT }}" \
+            -o StrictHostKeyChecking=yes \
+            "${{ secrets.NAS_USER }}@${{ secrets.NAS_HOST }}"
