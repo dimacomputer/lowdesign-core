@@ -1,22 +1,19 @@
 name: Deploy to NAS
+
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Test SSH reachability (verbose)
+      - name: Make SSH key file
         run: |
           echo "${{ secrets.NAS_KEY }}" > id
           chmod 600 id
-          ssh -vv -i id -o StrictHostKeyChecking=no -p "${{ secrets.NAS_PORT }}" \
-            ${{ secrets.NAS_USER }}@${{ secrets.NAS_HOST }} 'echo OK-connected'
-      - name: Run pull script on NAS
-        if: ${{ success() }}
+
+      - name: SSH → run pull script on NAS
         run: |
-          echo "${{ secrets.NAS_KEY }}" > id
-          chmod 600 id
-          ssh -i id -o StrictHostKeyChecking=no -p "${{ secrets.NAS_PORT }}" \
-            ${{ secrets.NAS_USER }}@${{ secrets.NAS_HOST }}
+          ssh -i id -p "${{ secrets.NAS_PORT }}" -o StrictHostKeyChecking=no \
+            "${{ secrets.NAS_USER }}@${{ secrets.NAS_HOST }}"
