@@ -1,3 +1,8 @@
+dfgs
+
+какой-то апдейт
+
+
 <?php
 /**
  * Plugin Name: LowDesign Core
