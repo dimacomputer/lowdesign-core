@@ -1,0 +1,30 @@
+name: Deploy to NAS
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}   # ручной запуск из вкладки Actions
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Prepare SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.NAS_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          # чтобы не было вопроса "Are you sure you want to continue connecting?"
+          ssh-keyscan -p "${{ secrets.NAS_PORT }}" "${{ secrets.NAS_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Run pull script on NAS
+        env:
+          NAS_HOST: ${{ secrets.NAS_HOST }}
+          NAS_PORT: ${{ secrets.NAS_PORT }}
+          NAS_USER: ${{ secrets.NAS_USER }}
+        run: |
+          # если ключ в authorized_keys с принудительной командой — просто ssh без команды
+          ssh -i ~/.ssh/id_ed25519 -p "$NAS_PORT" "$NAS_USER@$NAS_HOST" /bin/sh /volume1/web/margo/pull_margo.sh
+          # если в authorized_keys стоит command=".../pull_margo.sh", можно короче:
+          # ssh -i ~/.ssh/id_ed25519 -p "$NAS_PORT" "$NAS_USER@$NAS_HOST"
