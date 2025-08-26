@@ -19,8 +19,16 @@ add_filter('acf/settings/load_json', function($paths){
 });
 
 // Helpers / Shortcodes / Blocks
-require_once LD_CORE_PATH . '/inc/helpers.php';
-require_once LD_CORE_PATH . '/inc/shortcodes.php';
+require_once LD_CORE_PATH . '/modules/post_type_config.php';
+require_once LD_CORE_PATH . '/modules/taxonomy_ui_role.php';
+
+require_once LD_CORE_PATH . '/modules/add_excerpt_to_pages.php';
+
+require_once LD_CORE_PATH . '/inc/get_featured_image_block.php';
+require_once LD_CORE_PATH . '/inc/render_featured_svg_inline.php';
+require_once LD_CORE_PATH . '/inc/render_svg_inline.php';
+
+require_once LD_CORE_PATH . '/inc/acf.php';
 
 // Gutenberg blocks (PHP-rendered)
 add_action('init', function () {
