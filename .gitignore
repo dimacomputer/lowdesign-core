@@ -1,4 +1,3 @@
-# ---------------------------------------------------------
 # macOS system files
 .DS_Store
 .AppleDouble
@@ -6,8 +5,7 @@
 Icon
 ._*
 
-# ---------------------------------------------------------
-# Node.js / npm / build tools
+# Node.js / build tools
 node_modules/
 npm-debug.log*
 yarn-debug.log*
@@ -26,9 +24,7 @@ build/
 coverage/
 *.log
 
-# ---------------------------------------------------------
-# WordPress
-wp-config.php
+# WordPress (uploads и служебные файлы не нужны в теме)
 wp-content/uploads/
 wp-content/cache/
 wp-content/backups/
@@ -37,15 +33,19 @@ wp-content/advanced-cache.php
 wp-content/object-cache.php
 wp-content/debug.log
 
-# ---------------------------------------------------------
+# Synology system junk
+@eaDir/
+
+# Theme-specific
+assets/exports/       # временные экспортированные изображения
+*.map                 # sourcemaps (если не нужны)
+
 # IDE / Editors
 .vscode/
 .idea/
 *.sublime-project
 *.sublime-workspace
 
-# ---------------------------------------------------------
 # Misc
-*.env
+.env
 *.local
-
