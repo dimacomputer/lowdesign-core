@@ -1,4 +1,3 @@
-sudo tee /volume1/web/margo/wp-content/mu-plugins/lowdesign-core/lowdesign-core.php >/dev/null <<'PHP'
 <?php
 /**
  * LowDesign Core – MU plugin bootstrap
